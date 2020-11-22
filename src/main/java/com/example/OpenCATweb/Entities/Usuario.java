@@ -9,6 +9,7 @@ import com.example.OpenCATweb.Enums.Languages;
 import com.example.OpenCATweb.Enums.Status;
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -31,10 +32,11 @@ public class Usuario implements Serializable {
     private String password;
     private String email;
     
-    @Enumerated
+    @ElementCollection
     private List<Languages> workingLanguages;
     
-    @ManyToMany(mappedBy = "friends")
+    //@ManyToMany
+    @ElementCollection
     private List<Usuario> friends;
     
     @Enumerated

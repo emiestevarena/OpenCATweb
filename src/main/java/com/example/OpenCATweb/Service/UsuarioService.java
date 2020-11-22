@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -59,7 +60,8 @@ public class UsuarioService implements UserDetailsService {
         else{
             u = new Usuario();
             u.setUsername(username);
-            u.setPassword(password);
+            String encripted = new BCryptPasswordEncoder().encode(password);
+            u.setPassword(encripted);
             u.setEmail(email);
             u.setStatus(status);
             u.setWorkingLanguages(languages);
@@ -102,6 +104,11 @@ public class UsuarioService implements UserDetailsService {
         Usuario u = usuarioRepository.getByUsername(user.getUsername());
         if(u!=null && !u.getId().equals(user.getId())) return "username already in place";
         else{
+              if (!u.getPassword().equals(user.getPassword())) {
+            } else {
+                  String encripted = new BCryptPasswordEncoder().encode(user.getPassword());
+                  u.setPassword(encripted);
+            }
             usuarioRepository.save(user);
             return "successfully saved";
         }

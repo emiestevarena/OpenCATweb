@@ -6,6 +6,7 @@
 package com.example.OpenCATweb.Repositories;
 
 import com.example.OpenCATweb.Entities.Usuario;
+import com.example.OpenCATweb.Enums.Languages;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,6 +23,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
     @Query("select u from Usuario u where u.username like :username")
     public Usuario getByUsername(@Param("username") String username);
     
-    @Query("select u from Usuario u where u.languages like :source and u.languages like :target")
+    @Query("select u from Usuario u where :source member of u.workingLanguages and :target member of u.workingLanguages")
     public List<Usuario> getByLanguages(@Param("source") String source,@Param("target") String target);
 }
