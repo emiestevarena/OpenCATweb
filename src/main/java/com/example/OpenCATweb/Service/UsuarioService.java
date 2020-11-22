@@ -6,11 +6,13 @@
 package com.example.OpenCATweb.Service;
 
 import com.example.OpenCATweb.Entities.Usuario;
+import com.example.OpenCATweb.Enums.Languages;
 import com.example.OpenCATweb.Enums.Status;
 import com.example.OpenCATweb.Repositories.UsuarioRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -49,10 +51,74 @@ public class UsuarioService implements UserDetailsService {
         return usuarioRepository.getByLanguages(source, target);
     }
     //create
-    //addfriends
+    @Transactional
+    public String create(String username,String password,String email,Status status,List<Languages> languages){
+        try{
+        Usuario u = usuarioRepository.getByUsername(username);
+        if(u!=null) return "username already in place";
+        else{
+            u = new Usuario();
+            u.setUsername(username);
+            u.setPassword(password);
+            u.setEmail(email);
+            u.setStatus(status);
+            u.setWorkingLanguages(languages);
+            usuarioRepository.save(u);
+            return "successfully saved";
+        }
+        }catch(Exception ex){
+            return ex.getMessage();
+        }
+    }
+    //addfriend
+    @Transactional
+    public String addFriends(Usuario user, Usuario friend){
+        try{
+            List<Usuario> myFriends = user.getFriends();
+            myFriends.add(friend);
+            user.setFriends(myFriends);
+            return "sucessfully saved";
+        }catch(Exception ex){
+            return ex.getMessage();
+        }
+    }
     //removefriends
+    @Transactional
+    public String removeFriends(Usuario user, Usuario unfriend){
+        try{
+            List<Usuario> myFriends = user.getFriends();
+            myFriends.remove(unfriend);
+            user.setFriends(myFriends);
+            return "sucessfully removed";
+        }catch(Exception ex){
+            return ex.getMessage();
+        }
+    }
+
     //modify
+    @Transactional
+    public String modify(Usuario user){
+        try{
+        Usuario u = usuarioRepository.getByUsername(user.getUsername());
+        if(u!=null && !u.getId().equals(user.getId())) return "username already in place";
+        else{
+            usuarioRepository.save(user);
+            return "successfully saved";
+        }
+        }catch(Exception ex){
+            return ex.getMessage();
+        }
+    }
     //delete
+    @Transactional
+    public String delete(Usuario user){
+        try{
+            usuarioRepository.delete(user);
+            return "successfully deleted";
+        }catch(Exception ex){
+            return ex.getMessage();
+        }
+    }
     //userdetails
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
