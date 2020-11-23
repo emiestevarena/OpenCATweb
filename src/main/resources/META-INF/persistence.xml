@@ -3,6 +3,9 @@
   <persistence-unit name="com.example_OpenCATweb_jar_0.0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.example.OpenCATweb.Entities.Usuario</class>
+    <class>com.example.OpenCATweb.Entities.Proyecto</class>
+    <class>com.example.OpenCATweb.Entities.Segmento</class>
+    <class>com.example.OpenCATweb.Entities.Glosario</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/OpenCAT?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
