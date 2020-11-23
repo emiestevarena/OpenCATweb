@@ -25,12 +25,12 @@ public class SegmentoService {
     private SegmentoRepository segmentoRepository;
     //altasegmento
     @Transactional
-    public String crearSegmento(String sourceText,Languages source, Languages target,Proyecto proyecto){
+    public String crearSegmento(String sourceText,Proyecto proyecto){
         try{
             Segmento s = new Segmento();
             s.setSourceText(sourceText);
-            s.setSource(source);
-            s.setTarget(target);
+            s.setSource(proyecto.getSource());
+            s.setTarget(proyecto.getTarget());
             s.setProyecto(proyecto);
             segmentoRepository.save(s);
             return "segmento creado";
