@@ -12,6 +12,7 @@ import com.example.OpenCATweb.Enums.Languages;
 import com.example.OpenCATweb.Repositories.ProyectoRepository;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import javax.transaction.Transactional;
@@ -30,6 +31,25 @@ public class ProyectoService {
     
     @Autowired
     private SegmentoService segmentoService;
+    
+    public List<Proyecto> misProyectos(Long idUsuario){
+        return proyectoRepository.misProyectos(idUsuario);
+    }
+    
+    public List<Proyecto> misColaboraciones(Long idUsuario){
+        return proyectoRepository.misColaboraciones(idUsuario);
+    } 
+    
+     public List<Proyecto> proyectosConcatColaboraciones(Long idUsuario){
+        List<Proyecto> all = new ArrayList<>();
+        for(Proyecto p : proyectoRepository.misProyectos(idUsuario)){
+            all.add(p);
+        }
+        for(Proyecto p : proyectoRepository.misColaboraciones(idUsuario)){
+            all.add(p);
+        }
+        return all;
+    }
     
     //altaproyecto
     @Transactional

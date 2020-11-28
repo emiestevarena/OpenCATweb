@@ -19,10 +19,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProyectoRepository extends JpaRepository<Proyecto,Long> {
     
-    @Query("select p from Proyecto p where p.owner like :id")
-    public List<Proyecto> misProyectos(@Param("id") String idUsuario);
+    @Query("select p from Proyecto p where p.owner = :id")
+    public List<Proyecto> misProyectos(@Param("id") Long idUsuario);
     
     @Query("select p from Proyecto p where :id member of p.collaborators")
-    public List<Proyecto> misColaboraciones(@Param("id") String idUsuario);
+    public List<Proyecto> misColaboraciones(@Param("id") Long idUsuario);
     
 }
