@@ -11,6 +11,7 @@ import com.example.OpenCATweb.Enums.Status;
 import com.example.OpenCATweb.Repositories.UsuarioRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,8 @@ public class UsuarioService implements UserDetailsService {
     public List<Usuario> findByLanguage(String source, String target){
         return usuarioRepository.getByLanguages(source, target);
     }
+    
+    
     //create
     @Transactional
     public String create(String username,String password,String email,Status status,List<Languages> languages){

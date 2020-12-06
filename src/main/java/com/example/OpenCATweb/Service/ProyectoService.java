@@ -10,7 +10,9 @@ import com.example.OpenCATweb.Entities.Segmento;
 import com.example.OpenCATweb.Entities.Usuario;
 import com.example.OpenCATweb.Enums.Languages;
 import com.example.OpenCATweb.Repositories.ProyectoRepository;
+import com.example.OpenCATweb.Repositories.UsuarioRepository;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Scanner;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -27,25 +30,32 @@ import org.springframework.stereotype.Service;
 public class ProyectoService {
     
     @Autowired
+    private UsuarioRepository usuarioRepository;
+    
+    @Autowired
     private ProyectoRepository proyectoRepository;
     
     @Autowired
     private SegmentoService segmentoService;
     
-    public List<Proyecto> misProyectos(Long idUsuario){
-        return proyectoRepository.misProyectos(idUsuario);
+    public Proyecto getOne(Long id){
+        return proyectoRepository.getOne(id);
     }
     
-    public List<Proyecto> misColaboraciones(Long idUsuario){
-        return proyectoRepository.misColaboraciones(idUsuario);
+    public List<Proyecto> misProyectos(Usuario usuario){
+        return proyectoRepository.misProyectos(usuario);
+    }
+    
+    public List<Proyecto> misColaboraciones(Usuario usuario){
+        return proyectoRepository.misColaboraciones(usuario);
     } 
     
-     public List<Proyecto> proyectosConcatColaboraciones(Long idUsuario){
+     public List<Proyecto> proyectosConcatColaboraciones(Usuario usuario){
         List<Proyecto> all = new ArrayList<>();
-        for(Proyecto p : proyectoRepository.misProyectos(idUsuario)){
+        for(Proyecto p : proyectoRepository.misProyectos(usuario)){
             all.add(p);
         }
-        for(Proyecto p : proyectoRepository.misColaboraciones(idUsuario)){
+        for(Proyecto p : proyectoRepository.misColaboraciones(usuario)){
             all.add(p);
         }
         return all;
@@ -66,13 +76,16 @@ public class ProyectoService {
             return ex.getMessage();
         }
     }
+    
+    
     //cargararchivo
-    public String addFile(File file, Proyecto proyecto){
+    public String addFile(MultipartFile file, Proyecto proyecto){
         try{
-            Scanner myReader = new Scanner(file);
+            Scanner myReader = new Scanner(file.getInputStream());
             while(myReader.hasNextLine()){
                 segmentoService.crearSegmento(myReader.nextLine(), proyecto);
             }
+            myReader.close();
             return "archivo cargado";
         }catch(Exception ex){
             return ex.getMessage();

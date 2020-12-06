@@ -7,7 +7,9 @@ package com.example.OpenCATweb.Entities;
 
 import com.example.OpenCATweb.Enums.Languages;
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,11 +27,14 @@ public class Segmento implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @Column(length=2000)
     private String sourceText;
+    @Column(length=2000)
     private String targetText;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Languages source;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Languages target;
     @ManyToOne
     private Proyecto proyecto;

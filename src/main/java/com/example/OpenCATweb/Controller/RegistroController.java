@@ -32,12 +32,9 @@ public class RegistroController {
     private UsuarioService usuarioService;
     
     @GetMapping("/registro")
-    public String registro(ModelMap modelo,@RequestParam(required=false) String message){
+    public String registro(ModelMap modelo){
         Set<Languages> languages = EnumSet.allOf(Languages.class);
         modelo.put("languages",languages);
-        if(message!=null){
-            modelo.put("message",message);
-        }
         return "registro.html";
     }
     
@@ -53,6 +50,6 @@ public class RegistroController {
         }
         String message = usuarioService.create(username, password, email, Status.USER, workingLanguages);
         modelo.put("message",message);
-        return "redirect:/registro";
+        return registro(modelo);
     }
 }

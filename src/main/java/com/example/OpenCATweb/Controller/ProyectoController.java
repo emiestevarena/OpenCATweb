@@ -10,15 +10,19 @@ import com.example.OpenCATweb.Entities.Usuario;
 import com.example.OpenCATweb.Enums.Languages;
 import com.example.OpenCATweb.Service.ProyectoService;
 import com.example.OpenCATweb.Service.UsuarioService;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -37,11 +41,14 @@ public class ProyectoController {
     @Autowired
     private HttpSession session;
     
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/misproyectos")
     public String misProyectos(ModelMap modelo){
-        Usuario u = (Usuario) session.getAttribute("usuarioSession");
-        List<Proyecto> proyectos = proyectoService.misProyectos(u.getId());
-        modelo.put("proyectos",proyectos);
+        Usuario u = (Usuario) session.getAttribute("usuariosession");
+        List<Proyecto> proyectos = proyectoService.misProyectos(u);
+        if(proyectos!=null) {modelo.put("proyectos",proyectos);}
+        Set<Languages> languages = EnumSet.allOf(Languages.class);
+        modelo.put("languages",languages);
         return "misproyectos.html";
     }
     
@@ -53,6 +60,15 @@ public class ProyectoController {
                                 @RequestParam(required=true) String target){
         String message = proyectoService.create(nombre, usuarioService.getOne(Long.parseLong(idUsuario)), Languages.valueOf(source), Languages.valueOf(target));
         modelo.put("message", message);
-        return "redirect:/misproyectos";
+        return misProyectos(modelo);
+    }
+    
+    @PostMapping("/cargararchivo")
+    public String cargarArchivo(ModelMap modelo,
+                                @RequestParam(required=true) Long idProyecto,
+                                @RequestParam(required=true) MultipartFile archivo){
+        String message = proyectoService.addFile(archivo, proyectoService.getOne(idProyecto));
+        modelo.put("message", message);
+        return misProyectos(modelo);
     }
 }

@@ -9,6 +9,7 @@ import com.example.OpenCATweb.Enums.Languages;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,9 +29,9 @@ public class Proyecto implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Languages source;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Languages target;
     @ManyToOne
     private Usuario owner;
