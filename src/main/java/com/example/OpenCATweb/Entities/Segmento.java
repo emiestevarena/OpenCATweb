@@ -27,10 +27,9 @@ public class Segmento implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
-    @Column(length=2000)
+    @Column(length=2001)
     private String sourceText;
-    @Column(length=2000)
+    @Column(length=2001)
     private String targetText;
     @Enumerated(EnumType.STRING)
     private Languages source;

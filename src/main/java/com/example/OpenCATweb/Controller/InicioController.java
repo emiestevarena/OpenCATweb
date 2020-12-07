@@ -67,8 +67,12 @@ public class InicioController {
                                 @RequestParam Long idProyecto,
                                 @RequestParam String source){
         Proyecto p = proyectoService.getOne(idProyecto);
+        if(source.length()<255){
         String mensaje = segmentoService.crearSegmento(source, p);
-        modelo.put("mensaje",mensaje);
+        modelo.put("mensaje",mensaje);}
+        else{
+            modelo.put("mensaje","oración larga... considere recortarla");
+        }
         return inicio(modelo,idProyecto);
     }
 }

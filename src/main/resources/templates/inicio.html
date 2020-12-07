@@ -12,34 +12,44 @@ and open the template in the editor.
     <body>
         <!-- navigation bar -->
         <div th:replace="fragments :: nav_principal"></div>
+        <!--main div-->
+        <main class="container">
         <!-- filtrar proyectos-->
-        <div class="card">
-            <div class="card-body">
-                <h3 th:text="${session.usuariosession.username}"></h3>
-                <button th:each="proyecto: ${proyectos}" class="btn bg-dark">
-                    <a  th:href="@{/inicio(idProyecto=__${proyecto.id}__)}">
-                        <span th:text="${proyecto.name}" th:value="${proyecto.id}"></span>
-                    </a>
-                </button>
+        <div class="row border-0">
+            <div class="card border-0">
+                <div class="card-body">
+                    <h3 th:text="${session.usuariosession.username}"></h3>
+                    <button th:each="proyecto: ${proyectos}" class="btn bg-dark">
+                        <a  th:href="@{/inicio(idProyecto=__${proyecto.id}__)}">
+                            <span th:text="${proyecto.name}" th:value="${proyecto.id}"></span>
+                        </a>
+                    </button>
+                </div>
             </div>
-        </div>
-       <!-- cargar segmento -->
-        <div class="card">
-            <form method="POST" action="/crearsegmento" class="card-body">
+       
+        
+        <div class="col border-0">
+        
+        <!-- cargar segmento -->
+        <div class="card border-0">
+            <form method="POST" action="/crearsegmento" class="card-body text-center">
                 <h3 class="card-title">Crear segmento</h3>
                 <h4 th:if="${mensaje!=null}" th:text="${mensaje}"></h4>
-                <label>Proyecto</label>
-                <select th:each="proyecto : ${proyectos}" name="idProyecto">
+                <div class="list-group list-group-flush w-50 mx-auto">
+                    
+                    <label>Proyecto</label>
+                    <select th:each="proyecto : ${proyectos}" name="idProyecto">
                     <option th:text="${proyecto.name}" th:value="${proyecto.id}"></option>
-                </select>
-                <label>Texto fuente</label>
-                <textarea type="text" rows="3" name="" maxlength="2000" required></textarea>
-                <button type="submit" class="btn btn-success">Crear</button>
+                    </select>
+                    <label>Texto fuente</label>
+                    <textarea type="text" rows="3" name="source" maxlength="2000" required></textarea>
+                    <button type="submit" class="btn btn-success mt-4 w-25 mx-auto">Crear</button>
+                </div>
             </form>
         </div>
         <!-- mostrar segmentos para su traducción-->
-        <div th:if="${segmentos!=null}">
-            <div th:each="segmento: ${segmentos}" class="card">
+        <div th:if="${segmentos!=null}" class="card-deck">
+            <div th:each="segmento: ${segmentos}" class="card w-25">
                 <div class="card-body">
                     <p th:text="${segmento.sourceText}"></p>
                     <p th:unless="${segmento.targetText == null}" style="color: green;">segmento traducido</p>
@@ -50,6 +60,12 @@ and open the template in the editor.
                 </div>
             </div>
         </div>
+        <!--col-->
+        </div>
+        <!--row-->    
+        </div>
+        <!--main div-->
+        </main>
         <!-- script-->
         <div th:replace="fragments :: scripts"></div>
     </body>
