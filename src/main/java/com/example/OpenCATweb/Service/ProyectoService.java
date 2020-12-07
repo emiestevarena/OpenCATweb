@@ -52,12 +52,8 @@ public class ProyectoService {
     
      public List<Proyecto> proyectosConcatColaboraciones(Usuario usuario){
         List<Proyecto> all = new ArrayList<>();
-        for(Proyecto p : proyectoRepository.misProyectos(usuario)){
-            all.add(p);
-        }
-        for(Proyecto p : proyectoRepository.misColaboraciones(usuario)){
-            all.add(p);
-        }
+        all.addAll(proyectoRepository.misProyectos(usuario));
+        all.addAll(proyectoRepository.misColaboraciones(usuario));
         return all;
     }
     
@@ -133,7 +129,7 @@ public class ProyectoService {
     public File export(Proyecto p){
         try{
             File export = new File(p.getName()+".txt");
-            List<Segmento> segmentos = segmentoService.misSegmentos(p.getId().toString());
+            List<Segmento> segmentos = segmentoService.misSegmentos(p);
             export.createNewFile();
             String traduccion = "";
             for(Segmento s : segmentos){

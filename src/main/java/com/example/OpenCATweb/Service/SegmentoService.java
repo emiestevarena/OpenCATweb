@@ -59,8 +59,8 @@ public class SegmentoService {
         }
     }
     //missegmentos
-    public List<Segmento> misSegmentos(String idProyecto){
-        return segmentoRepository.misSegmentos(idProyecto);
+    public List<Segmento> misSegmentos(Proyecto p){
+        return segmentoRepository.misSegmentos(p);
     }
     //memoriadetraduccion
     public String memoriaDeTraduccion(String source, String target,Segmento original){

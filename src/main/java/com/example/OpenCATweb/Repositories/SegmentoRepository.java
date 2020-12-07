@@ -5,6 +5,7 @@
  */
 package com.example.OpenCATweb.Repositories;
 
+import com.example.OpenCATweb.Entities.Proyecto;
 import com.example.OpenCATweb.Entities.Segmento;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,8 +20,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SegmentoRepository extends JpaRepository<Segmento,Long> {
     
-    @Query("select s from Segmento s where s.proyecto like :id")
-    public List<Segmento> misSegmentos(@Param("id") String idProyecto);
+    @Query("select s from Segmento s where s.proyecto like :p")
+    public List<Segmento> misSegmentos(@Param("p") Proyecto p);
     
     @Query("select s from Segmento s where s.source like :source and s.target like :target")
     public List<Segmento> traduccionesDirectas(@Param("source") String source,@Param("target") String target);

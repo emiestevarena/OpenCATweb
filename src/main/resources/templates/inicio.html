@@ -13,22 +13,21 @@ and open the template in the editor.
         <!-- navigation bar -->
         <div th:replace="fragments :: nav_principal"></div>
         <!-- filtrar proyectos-->
-        <div>
-            <button th:each="proyecto: ${proyectos}">
-                <span th:text="${proyecto.nombre}" th:value="${proyecto.id}"></span>
-            </button>
-        </div>
-        <!-- mostrar segmentos para su elección-->
-        <div th:if="${segmentos!=null}">
-            <div th:each="${segmento: ${segmentos}}">
-                
+        <div class="card">
+            <div class="card-body">
+                <h3 th:text="${session.usuariosession.username}"></h3>
+                <button th:each="proyecto: ${proyectos}" class="btn bg-dark">
+                    <a  th:href="@{/inicio(idProyecto=__${proyecto.id}__)}">
+                        <span th:text="${proyecto.name}" th:value="${proyecto.id}"></span>
+                    </a>
+                </button>
             </div>
         </div>
-        <!-- cargar segmento -->
-        <div th:if="${segmentos == null}">
-            <div>
-                <form method="POST" action="/crearsegmento">
-                <h3>Crear segmento</h3>
+       <!-- cargar segmento -->
+        <div class="card">
+            <form method="POST" action="/crearsegmento" class="card-body">
+                <h3 class="card-title">Crear segmento</h3>
+                <h4 th:if="${mensaje!=null}" th:text="${mensaje}"></h4>
                 <label>Proyecto</label>
                 <select th:each="proyecto : ${proyectos}" name="idProyecto">
                     <option th:text="${proyecto.name}" th:value="${proyecto.id}"></option>
@@ -36,7 +35,19 @@ and open the template in the editor.
                 <label>Texto fuente</label>
                 <textarea type="text" rows="3" name="" maxlength="2000" required></textarea>
                 <button type="submit" class="btn btn-success">Crear</button>
-                </form>
+            </form>
+        </div>
+        <!-- mostrar segmentos para su traducción-->
+        <div th:if="${segmentos!=null}">
+            <div th:each="segmento: ${segmentos}" class="card">
+                <div class="card-body">
+                    <p th:text="${segmento.sourceText}"></p>
+                    <p th:unless="${segmento.targetText == null}" style="color: green;">segmento traducido</p>
+                    <p th:if="${segmento.targetText == null}" style="color: red;">segmento sin traducir</p>
+                    <button class="btn bg-dark">
+                        <a  th:href="@{/segmento/${proyecto.id}}">Traducir</a>
+                    </button>
+                </div>
             </div>
         </div>
         <!-- script-->
